@@ -1,0 +1,32 @@
+--
+-- Módulo CobreDireto para Magento 1.5.0.1
+-- Versão 0.1.4
+--
+
+Descompacte o pacote .zip dentro da pasta app/ da sua aplicação.
+Duas pastas serão mescladas, são elas:
+ code/community/Cobredireto/*
+ etc/modules/Cobredireto.xml
+
+Configure seu meio de pagamento CobreDireto através do painel 
+de controle do Magento, na aba “Payment Methods” em System->
+Configuration->Payment Methods
+
+=====================================
+Changelog
+=====================================
+
+Cobredireto - v0.1.4
+17/02/2011:
+- Corrigido a soma e quantidade dos valores dos produtos adicionados 
+  ao carrinho.
+
+Cobredireto - v0.1.3
+18/01/2011:
+- Alteração o texto "<cobredireto>" para "<Cobredireto>" no arquivo 
+  Cobredireto.xml para resolver a duplicidade do múdulo em System->
+  Configuration->Advanced->Disable Modules Output
+
+Fix para o envio do telefone sem DDD.
+Adição do arquivo README
+

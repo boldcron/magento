@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+
+<!-- 
+/**
+ * Cobre Direto
+ *
+ * @category Payment Gateway
+ * @package  CobreDireto
+ */
+-->
+
+<config>
+    <modules>
+        <Cobredireto>
+            <version>0.1.0</version>
+        </Cobredireto>
+    </modules>
+    <global>
+        <models>
+            <cobredireto>
+                <class>Cobredireto_Model</class>
+            </cobredireto>
+        </models>
+        <resources>
+            <cobredireto_setup>
+                <setup><module>Cobredireto</module></setup>
+            </cobredireto_setup>
+            <connection><use>core_setup</use></connection>
+            <cobredireto_write>
+                <connection><use>core_write</use></connection>
+            </cobredireto_write>
+            <codedireto_read>
+                <connection><use>core_read</use></connection>
+            </codedireto_read>
+        </resources>
+		<helpers>
+			<Cobredireto>
+				<class>Cobredireto_Helper</class>
+			</Cobredireto>
+		</helpers>
+    </global>
+
+	
+    <frontend>
+        <routers>
+            <cobredireto>
+                <use>standard</use>
+                <args>
+                    <module>Cobredireto</module>
+                    <frontName>cobredireto</frontName>
+                </args>
+            </cobredireto>
+        </routers>
+        <layout>
+            <updates>
+                <file>cobredireto.xml</file>
+            </updates>
+        </layout>
+    </frontend>
+	
+
+    <default>
+        <payment>
+            <cobredireto>
+                <active>1</active>
+                <model>Cobredireto_Model_Standard</model>
+                <title>Cobredireto</title>
+                <allowspacific>1</allowspacific>
+            </cobredireto>
+        </payment>
+    </default>
+</config>
