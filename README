@@ -16,12 +16,17 @@ Configuration->Payment Methods
 Changelog
 =====================================
 
-Cobredireto - v0.1.4
+Cobredireto - v0.1.4.1
+02/03/2011:
+- Trocanco o símbolo de - por + na linha 126, pois o valod do desconto vem
+  negativo, e no final o cobredireto estava somando ao invéz de diminuir
+
+Cobredireto - v0.1.4.0
 17/02/2011:
 - Corrigido a soma e quantidade dos valores dos produtos adicionados 
   ao carrinho.
 
-Cobredireto - v0.1.3
+Cobredireto - v0.1.3.0
 18/01/2011:
 - Alteração o texto "<cobredireto>" para "<Cobredireto>" no arquivo 
   Cobredireto.xml para resolver a duplicidade do múdulo em System->
