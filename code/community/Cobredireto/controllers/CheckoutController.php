@@ -123,7 +123,8 @@ class Cobredireto_CheckoutController
             $subTotal=$item->getRowTotal();
 
             // valor total do carrinho = ((soma de todos os produtos) - desconto))
-            $subtotalComDesconto = ($subTotal - $order->getDiscountAmount());
+            $subtotalComDesconto = ($subTotal + $order->getDiscountAmount());
+
             $cart[] = array(
                 'descricao'  => $item->getName(),
                 'quantidade' => $item_qty,
