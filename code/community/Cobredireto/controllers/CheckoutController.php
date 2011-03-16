@@ -132,8 +132,8 @@ class Cobredireto_CheckoutController
                 'valor'      => $item_price,
             );
         }        
-
-        $pg->adicionar($cart);
+        
+        $pg->adicionar($cart, $order->getDiscountAmount());
 
         // Cria a compra junto ao CobreDireto e redireciona o usuário
         $pg->pagar();
