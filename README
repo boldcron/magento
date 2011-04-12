@@ -15,6 +15,10 @@ Configuration->Payment Methods
 Changelog
 =====================================
 
+Cobredireto - v0.1.4.2
+02/03/2011:
+- Incluindo a opção de desconto para compras com cumpon de desconto
+
 Cobredireto - v0.1.4.1
 02/03/2011:
 - Trocanco o símbolo de - por + na linha 126, pois o valod do desconto vem

@@ -27,21 +27,17 @@ require_once('Pg.php');
  * @author      Michael Granados <mike@visie.com.br>
  */
 class Cobredireto_CheckoutController
-    extends Mage_Core_Controller_Front_Action
-{
+extends Mage_Core_Controller_Front_Action {
 
-	function formatNumber ($number)
-	{
-		return sprintf('%.2f', (double) $number) * 1;
-	}
+    function formatNumber ($number) {
+        return sprintf('%.2f', (double) $number) * 1;
+    }
 
-    public function getStandard()
-    {
+    public function getStandard() {
         return Mage::getSingleton('cobredireto/standard');
     }
 
-    public function indexAction()
-    {
+    public function indexAction() {
         $order = Mage::getModel('sales/order');
         $order->load(Mage::getSingleton('checkout/session')->getLastOrderId());
 
@@ -57,8 +53,8 @@ class Cobredireto_CheckoutController
         /**
          * Caso tenha escolhido que o usuário será encaminhado para a página da compra, atualiza a URL que será redirecionado
          */
-        if($standard->getConfigData('urlretornoorder')==true){
-            $orderId = ($standard->getConfigData('urlretornoorder')==true) ? $standard->getCheckout()->getLastOrderId() : '';
+        if($standard->getConfigData('urlretornoorder')==true) {
+            $orderId = $standard->getCheckout()->getLastOrderId();
             define('CD_URL_RECIBO'  , Mage::getUrl('sales/order/view/',array('order_id'=>$orderId) ));
         }else {
             define('CD_URL_RECIBO'  , Mage::getUrl($standard->getConfigData('urlretorno')).'?');
@@ -72,8 +68,13 @@ class Cobredireto_CheckoutController
 
         // Adicionando dois produto
         //$address = $standard->getQuote()->getShippingAddress();
-	    $address = $order->getShippingAddress();
-	    $email = $order->getCustomerEmail();	
+        $address = $order->getShippingAddress();
+        
+        $email = $order->getCustomerEmail();
+
+        $street=explode(',',$address->getStreet1());            
+        $street = array_slice(array_merge($street, array("","","")),0,3); 
+        list($rua, $numero, $complemento) = $street;
 
         $telephone = preg_replace('@[^\d]@', '', $address->getTelephone());
         $telephone = str_pad($telephone, 10, "0", STR_PAD_LEFT);
@@ -84,15 +85,20 @@ class Cobredireto_CheckoutController
                 'email'         => $email,//$address->getEmail(),
                 'documento'     => '',
                 'tel_casa'      => array (
-                    'area'      => substr($telephone, 0, -8),
-                    'numero'    => substr($telephone, -8),
+                    'area'   => substr($telephone, 0, -8),
+                    'numero' => substr($telephone, -8),
                 ),
                 'cep'           => preg_replace('@\D@', '', $address->getPostcode()),
-            ));
-
-
-
-         // pega todos os ítens
+                'rua'           => $rua,
+                'numero'        => $numero,
+                'complemento'   => $complemento,
+                'bairro'        => $address->getStreet2(),
+                'cidade'        => $address->getRegion(),
+                'estado'        => $address->getRegionCode(),
+                'pais'          => $address->getCountry(),
+        ));
+        
+        // pega todos os ítens
         $itens = $order->getAllItems();
 
         // Array de ítens do carrinho
@@ -116,9 +122,9 @@ class Cobredireto_CheckoutController
                 $item_price = $this->formatNumber($item_price);
             }
             if (!$item_price) {
-				$item_price = $this->formatNumber($item->getBasePrice());
+                $item_price = $this->formatNumber($item->getBasePrice());
             }
-        
+
             //$descricaoProdutos.= $item->getName() . ", " ;
             $subTotal=$item->getRowTotal();
 
@@ -126,20 +132,20 @@ class Cobredireto_CheckoutController
             $subtotalComDesconto = ($subTotal + $order->getDiscountAmount());
 
             $cart[] = array(
-                'descricao'  => $item->getName(),
-                'quantidade' => $item_qty,
-                'id'	       => '',
-                'valor'      => $item_price,
+                    'descricao'  => $item->getName(),
+                    'quantidade' => $item_qty,
+                    'id'	       => '',
+                    'valor'      => $item_price,
             );
-        }        
-        
+        }
+
         $pg->adicionar($cart, $order->getDiscountAmount());
 
         // Cria a compra junto ao CobreDireto e redireciona o usuário
         $pg->pagar();
 
         //Limpando o carrinho
-        foreach( Mage::getSingleton('checkout/session')->getQuote()->getItemsCollection() as $item ){
+        foreach( Mage::getSingleton('checkout/session')->getQuote()->getItemsCollection() as $item ) {
             Mage::getSingleton('checkout/cart')->removeItem( $item->getId() )->save();
         }
         die(' erro ');
